@@ -33,6 +33,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/data/
 .idea/
 .jpb/
 ### Mac OS ###
