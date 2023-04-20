@@ -1,15 +1,16 @@
 package com.ecommerce.orderservice.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderRequestDTO {
 
-    private List<OrderItemsDto> orderItemsDto;
+    private List<OrderItemsDto> orderItemsDto = new ArrayList<>();
 }

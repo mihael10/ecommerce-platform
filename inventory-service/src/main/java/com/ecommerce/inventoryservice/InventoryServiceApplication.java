@@ -5,35 +5,38 @@ import com.ecommerce.inventoryservice.repository.InventoryRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.text.NumberFormat;
+
+
 @SpringBootApplication
+@EnableDiscoveryClient
 public class InventoryServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
 
+
 	@Bean
-	public CommandLineRunner loadData(InventoryRepository inventoryRepository) {
+	public CommandLineRunner displayMemoryAndCpuUsage() {
 		return args -> {
-			Inventory inventory = new Inventory();
+			Runtime runtime = Runtime.getRuntime();
+			long totalMemory = runtime.totalMemory();
+			long freeMemory = runtime.freeMemory();
+			long usedMemory = totalMemory - freeMemory;
+			NumberFormat format = NumberFormat.getInstance();
 
-			inventory.setSkuCode("iphone_12");
-			inventory.setQuantity(3L);
+			OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+			double cpuLoad = osBean.getSystemLoadAverage();
 
-			Inventory inventory1 = new Inventory();
-			inventory1.setSkuCode("iphone_11_pro");
-			inventory1.setQuantity(1L);
-
-			Inventory inventory2 = new Inventory();
-			inventory2.setSkuCode("iphone_13");
-			inventory2.setQuantity(2L);
-
-			inventoryRepository.save(inventory);
-			inventoryRepository.save(inventory1);
-			inventoryRepository.save(inventory2);
-
+			System.out.println("Memory Usage: " + format.format(usedMemory / (1024 * 1024)) + " MB / " + format.format(totalMemory / (1024 * 1024)) + " MB");
+			System.out.println("Memory Usage: " + format.format(usedMemory / (1024 * 1024 * 1024.0)) + " GB / " + format.format(totalMemory / (1024 * 1024 * 1024.0)) + " GB");
+			System.out.println("CPU Usage: " + cpuLoad);
 		};
 	}
 }

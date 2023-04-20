@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderItems {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_items_id")
     private Long orderItemsId;
 
