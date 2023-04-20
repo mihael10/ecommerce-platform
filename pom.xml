@@ -12,8 +12,8 @@
 
     <groupId>com.ecommerce</groupId>
     <artifactId>ecommerce-platform</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>product-service</module>
