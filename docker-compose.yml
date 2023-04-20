@@ -8,6 +8,50 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
+  apigateway:
+    image: ecommerce-apigateway
+    ports:
+      - "8080:8080"
+
+  product-service:
+      image: product-service
+      ports:
+        - "8081:8080"
+      # Add any necessary ports or environment variables for this service
+
+  order-service:
+      image: order-service
+      ports:
+        - "8082:8080"
+      depends_on:
+        - postgres
+      # Add any necessary ports or environment variables for this service
+
+  inventory-service:
+      image: inventory-service
+      ports:
+        - "8083:8080"
+      depends_on:
+        - postgres
+      # Add any necessary ports or environment variables for this service
+
+  notification-service:
+      image: notification-service
+      ports:
+        - "8084:8080"
+      # Add any necessary ports or environment variables for this service
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Programming
+      POSTGRES_MULTIPLE_DATABASES: order-service,inventory-service
+    volumes:
+      - ./data/postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   broker:
     image: confluentinc/cp-kafka:7.3.2
     container_name: broker
