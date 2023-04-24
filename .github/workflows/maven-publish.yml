@@ -40,7 +40,7 @@ jobs:
       - name: Install Docker
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker
+          sudo apt-get install snap docker
           docker --version
 
       - name: Build and test Maven project
