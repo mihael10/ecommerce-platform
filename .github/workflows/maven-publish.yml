@@ -37,11 +37,5 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install snap docker
-          docker --version
-
       - name: Build and test Maven project
         run: mvn test
