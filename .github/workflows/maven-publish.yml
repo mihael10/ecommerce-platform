@@ -1,5 +1,5 @@
 # .github/workflows/java-ci.yml
-name: Product Service CI
+name: Ecommerce Platform CI
 
 on:
   push:
@@ -26,11 +26,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    services:
-      mongo:
-        image: mongo:4.4.2
-        ports:
-          - 27017:27017
 
     steps:
       - name: Checkout repository
@@ -41,9 +36,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Run Docker container
-        run: docker run --name mongo -p 27017:27017 -d mongo:4.4.2
 
       - name: Install Docker
         run: |
