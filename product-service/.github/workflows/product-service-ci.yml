@@ -1,5 +1,5 @@
 # .github/workflows/java-ci.yml
-name: Java CI
+name: Product Service CI
 
 on:
   push:
