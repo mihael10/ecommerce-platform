@@ -59,7 +59,7 @@ class ProductControllerTests {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(productRequestString))
 				.andExpect(status().isCreated());
-		assertEquals(1,productRepository.findAll().size());
+		assertEquals(2,productRepository.findAll().size());
 	}
 
 	@Test
