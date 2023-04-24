@@ -1,21 +1,18 @@
 package com.ecommerce.productservice;
 
 import com.ecommerce.productservice.DTO.ProductRequestDTO;
-import com.ecommerce.productservice.DTO.ProductResponseDTO;
 import com.ecommerce.productservice.repository.ProductRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.assertions.Assertions;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -24,13 +21,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-class ProductServiceApplicationTests {
+class ProductControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -62,29 +62,22 @@ class ProductServiceApplicationTests {
 		assertEquals(1,productRepository.findAll().size());
 	}
 
-	@Ignore
+	@Test
 	void shouldGetTheProduct() throws Exception {
+		ProductRequestDTO productRequest = getProductRequest();
+		String productRequestString = objectMapper.writeValueAsString(productRequest);
 
-		ProductResponseDTO productRequest = getProductResponse();
-		String productResponseString = objectMapper.writeValueAsString(productRequest);
-
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/product")
+		// Create a product first to be retrieved later
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(productResponseString))
+						.content(productRequestString))
+				.andExpect(status().isCreated());
+
+		// Get all products
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/product")
+						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
-		assertEquals(1,productRepository.findAll().size());
 	}
-
-	private ProductResponseDTO getProductResponse() {
-		return ProductResponseDTO.builder()
-				.id(null)
-				.name("Samsung s7")
-				.description("mobile phone")
-				.price(BigDecimal.valueOf(400))
-				.build();
-	}
-
-	//id=643fcfb59e91280ed28155c0, name=Samsung s7, description=mobile phone, price=400
 
 	private ProductRequestDTO getProductRequest() {
 		return ProductRequestDTO.builder()
