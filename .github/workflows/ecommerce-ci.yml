@@ -36,10 +36,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build and test Maven project
+      - name: Build and Test Maven
         run: mvn test
 
-      - name: Build and test Maven project
+      - name: Publish Jacoco Report
         run: mvn test jacoco:report
 
       - name: Publish JaCoCo coverage report
