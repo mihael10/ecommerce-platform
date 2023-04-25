@@ -36,5 +36,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build and test Maven project
+      - name: Build and Test Maven
         run: mvn test
+
+      - name: Publish Jacoco Report
+        run: mvn test jacoco:report
+
+      - name: Publish JaCoCo coverage report
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./target/site/jacoco/jacoco.xml
