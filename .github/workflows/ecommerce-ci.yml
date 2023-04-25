@@ -1,4 +1,3 @@
-# .github/workflows/java-ci.yml
 name: Ecommerce Platform CI
 
 on:
