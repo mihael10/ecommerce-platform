@@ -1,4 +1,4 @@
-FROM openjdk:22-ea-28-jdk-slim
+FROM openjdk:22-ea-33
 
 COPY target/*.jar app.jar
 
