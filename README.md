@@ -2,6 +2,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/mihael10/ecommerce-platform?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/mihael10/ecommerce-platform?style=flat-square)
 [![codecov](https://codecov.io/gh/mihael10/ecommerce-platform/graph/badge.svg?token=PLD6A057UI)](https://codecov.io/gh/mihael10/ecommerce-platform)
+[![Known Vulnerabilities](https://snyk.io/test/github/mihael10/ecommerce-platform/badge.svg)](https://snyk.io/test/github/mihael10/ecommerce-platform)
 
 
 # ecommerce-platform
