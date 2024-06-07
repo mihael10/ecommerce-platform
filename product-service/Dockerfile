@@ -1,4 +1,4 @@
-FROM openjdk:22-ea-33
+FROM openjdk:23-ea-25-oraclelinux8
 
 COPY target/*.jar app.jar
 
