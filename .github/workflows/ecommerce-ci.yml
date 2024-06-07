@@ -39,11 +39,7 @@ jobs:
       - name: Build and Test Maven
         run: mvn test
 
-      - name: Publish Jacoco Report
-        run: mvn test jacoco:report
-
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
-        env:
+        with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: mihael10/ecommerce-platform
