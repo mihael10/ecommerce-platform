@@ -38,3 +38,8 @@ build/
 .jpb/
 ### Mac OS ###
 .DS_Store
+
+postgres-order/
+postgres-inventory/
+mongo-data/
+mysql_keycloak_data/
