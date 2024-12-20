@@ -29,7 +29,11 @@ Follow these steps to get your environment set up and run the project locally.
 
 ### Clone the repository
 
-
-```bash
 git clone https://github.com/mihael10/ecommerce-platform.git
+
 cd ecommerce-platform
+
+. build_images.sh (Execute this script to pull and build all service images)
+
+docker-compose up
+
