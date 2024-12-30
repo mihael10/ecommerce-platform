@@ -13,9 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -45,6 +47,28 @@ public class InventoryControllerTest {
                 .andExpect(jsonPath("$[0].inStock").value(true))
                 .andExpect(jsonPath("$[1].skuCode").value("SKU456"))
                 .andExpect(jsonPath("$[1].inStock").value(false));
+    }
+
+    @Test
+    void isInStock_NoSkuCodesProvided_ReturnsBadRequest() throws Exception {
+        // Act & Assert
+        mockMvc.perform(get("/api/inventory")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void isInStock_EmptySkuCodes_ReturnsOkWithEmptyList() throws Exception {
+        // Arrange
+        List<InventoryResponseDTO> expectedResponse = Collections.emptyList();
+        given(inventoryService.isInStock(Collections.emptyList())).willReturn(expectedResponse);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/inventory")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("skuCode", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 
 }

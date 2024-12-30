@@ -66,7 +66,7 @@ public class OrderService {
             }
         }
 
-    private OrderItems mapToDto(OrderItemsDto orderItemsDto) {
+    OrderItems mapToDto(OrderItemsDto orderItemsDto) {
 
         OrderItems orderItems = new OrderItems();
         orderItems.setOrderItemsId(orderItemsDto.getOrderItemsId());
