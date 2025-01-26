@@ -1,26 +1,52 @@
 codecov:
   notify:
-    wait_for_ci: true
-  require_ci_to_pass: true
-  token: ba4d1ad0-2aaf-4569-983c-4013b607927e
+    wait_for_ci: true      # Wait for CI pipeline to complete before sending Codecov notifications
+  require_ci_to_pass: true # Ensure CI must pass before Codecov completes its analysis
+  token: ""                # Securely handle token, should come from CI/CD secrets like ${{ secrets.CODECOV_TOKEN }}
+
 comment:
-  behavior: default
-  layout: reach,diff,flags,tree,reach
-  show_carryforward_flags: false
+  behavior: default  # Default commenting behavior
+  layout: reach,diff,flags,tree,reach  # Include all possible insights in the layout: coverage reach, diffs, flags, file tree
+  show_carryforward_flags: true # Enable carryforward flags to track historical results
+
 coverage:
-  precision: 2
+  precision: 2       # Use two decimal points for coverage percentages
   range:
-    - 60.0
-    - 80.0
-  round: down
+    - 0.0            # Minimum coverage allowed for tracking
+    - 100.0          # Maximum coverage for reporting
+  round: down        # Round coverage numbers down
   status:
-    changes: false
+    changes: true    # Track and report coverage changes in pull requests
     default_rules:
-      flag_coverage_not_uploaded_behavior: include
-    patch: true
-    project: true
+      flag_coverage_not_uploaded_behavior: include # Include results even if flag coverage isn't uploaded
+    patch: true      # Enforce minimum coverage for new changes/patches
+    project:
+      default:
+        target: 100%     # Projects must aim for complete (100%) coverage
+        threshold: 1%    # Allow a small buffer for minor changes without CI failure
+      branches:
+        target: 80%      # Require 80% branch coverage minimum
+      lines:
+        target: 90%      # Require 90% line coverage
+      functions:
+        target: 75%      # Set functional tests coverage at a minimum of 75%
+
+flags:
+  - unit-tests          # Divide tests by flag for isolated tracking and reporting
+  - integration-tests
+  - e2e-tests
+  - components-tests
+  - performance-tests
+  - regression-tests    # Include flags for various test types for better organization
+
 github_checks:
-  annotations: true
-slack_app: true
+  annotations: true      # Show detailed annotations in PR checks for better feedback
 
+parsers:
+  jacoco:
+    branch_detection:
+      conditional: yes   # Detect coverage for conditional branches
+      noncode: yes       # Track branches for non-code elements
+      cyclomatic: yes    # Enable cyclomatic complexity detection and tracking
 
+slack_app: true          # Enable integration with Slack for notifications
