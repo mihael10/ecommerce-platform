@@ -93,7 +93,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Upload Coverage Reports
-        uses: codecov/codecov-action@v4.0.1
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+          files: ./target/site/jacoco/jacoco.xml # Specify where your coverage report is
+          token: ${{ secrets.CODECOV_TOKEN }}  # Use Codecov token securely via secrets

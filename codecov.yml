@@ -1,2 +1,28 @@
 codecov:
-  token: ba4d1ad0-2aaf-4569-983c-4013b607927e
+  # Codecov token should not be hardcoded; ensure this is set securely in the CI/CD secrets.
+  token: ""
+
+coverage:
+  # Set thresholds for code coverage to enforce quality standards.
+  status:
+    project:
+      # Specify the default coverage target (e.g., 80%).
+      default:
+        target: 80%
+        threshold: 2%   # Allow deviation of 2% from target without failing.
+      # Optionally, configure additional targets for specific types of coverage (e.g., branches).
+    patch:
+      default:
+        target: 80%     # Enforce 80% coverage on new changes.
+
+comment:
+  # Disable Codecov comments on pull requests to avoid noise during development.
+  layout: false
+
+parsers:
+  # If multiple test result files are involved, configure parsing rules here.
+  jacoco:
+    branch_detection:
+      conditional: yes
+      noncode: yes
+      cyclomatic: yes
