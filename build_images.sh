@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Array of microservice names
-microservices=("discovery-server" "api-gateway" "order-service" "product-service" "inventory-service" "notification-service")
+microservices=("discovery-server" "api-gateway" "order-service" "product-service" "inventory-service" "notification-service" "user-service")
 
 # Base directory path for the microservices
 base_dir="$HOME/ecommerce-platform"

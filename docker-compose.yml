@@ -28,6 +28,20 @@ services:
       - "5433:5432"
     restart: always
 
+  postgres-user:
+    container_name: postgres-user
+    image: postgres
+    environment:
+      POSTGRES_DB: user-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-user:/data/postgres
+    ports:
+      - "5434:5432"
+    restart: always
+
   mongo:
     container_name: mongo
     image: mongo:4.4.14-rc0-focal
@@ -123,6 +137,18 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory-service
     depends_on:
       - postgres-inventory
+      - discovery-server
+      - api-gateway
+
+  user-service:
+    image: ecommerce-platform/user-service:latest
+    container_name: user-service
+    ports:
+      - "8086:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-user:5432/user-service
+    depends_on:
+      - postgres-user
       - discovery-server
       - api-gateway
 
