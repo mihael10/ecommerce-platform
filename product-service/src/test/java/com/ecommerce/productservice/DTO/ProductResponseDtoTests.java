@@ -1,6 +1,5 @@
-package com.ecommerce.productservice;
+package com.ecommerce.productservice.DTO;
 
-import com.ecommerce.productservice.DTO.ProductResponseDTO;
 import com.ecommerce.productservice.entity.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

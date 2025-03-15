@@ -1,4 +1,4 @@
-package com.ecommerce.productservice;
+package com.ecommerce.productservice.controller;
 
 import com.ecommerce.productservice.DTO.ProductRequestDTO;
 import com.ecommerce.productservice.repository.ProductRepository;
@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.result.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
