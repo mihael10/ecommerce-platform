@@ -9,7 +9,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.ecommerce</groupId>
     <artifactId>user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>user-service</name>
