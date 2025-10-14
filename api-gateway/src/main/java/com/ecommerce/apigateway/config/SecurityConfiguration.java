@@ -12,8 +12,12 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
 
+    private final ReactiveJwtDecoder jwtDecoder;
+
     @Autowired
-    private ReactiveJwtDecoder jwtDecoder;
+    public SecurityConfiguration(ReactiveJwtDecoder jwtDecoder) {
+        this.jwtDecoder = jwtDecoder;
+    }
 
     @Bean
     public SecurityWebFilterChain webFilterChain(ServerHttpSecurity http) {

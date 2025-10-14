@@ -1,8 +1,5 @@
 package com.ecommerce.orderservice.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import com.ecommerce.orderservice.DTO.OrderRequestDTO;
 import com.ecommerce.orderservice.event.OrderPlacedEvent;
 import com.ecommerce.orderservice.repository.OrderRepository;
@@ -11,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import static org.mockito.Mockito.*;
 
 class OrderControllerDiffblueTest {
   /**

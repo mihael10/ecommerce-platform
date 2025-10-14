@@ -1,9 +1,11 @@
 package com.ecommerce.orderservice.DTO;
 
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import java.math.BigDecimal;
-import org.junit.jupiter.api.Test;
 
 class OrderItemsDtoDiffblueTest {
   /**

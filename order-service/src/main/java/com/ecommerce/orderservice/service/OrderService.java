@@ -1,13 +1,12 @@
 package com.ecommerce.orderservice.service;
 
 import com.ecommerce.orderservice.DTO.InventoryResponseDTO;
-import com.ecommerce.orderservice.DTO.OrderRequestDTO;
 import com.ecommerce.orderservice.DTO.OrderItemsDto;
+import com.ecommerce.orderservice.DTO.OrderRequestDTO;
 import com.ecommerce.orderservice.entity.Order;
 import com.ecommerce.orderservice.entity.OrderItems;
 import com.ecommerce.orderservice.event.OrderPlacedEvent;
 import com.ecommerce.orderservice.repository.OrderRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,10 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service

@@ -3,7 +3,6 @@ package com.ecommerce.inventoryservice.service;
 import com.ecommerce.inventoryservice.DTO.InventoryResponseDTO;
 import com.ecommerce.inventoryservice.entity.Inventory;
 import com.ecommerce.inventoryservice.repository.InventoryRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
