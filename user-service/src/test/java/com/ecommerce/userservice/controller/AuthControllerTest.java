@@ -2,7 +2,6 @@ package com.ecommerce.userservice.controller;
 
 import com.ecommerce.userservice.entity.Role;
 import com.ecommerce.userservice.service.AuthService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
