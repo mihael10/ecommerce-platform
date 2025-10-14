@@ -15,6 +15,7 @@
 	<description>Inventory Service</description>
 	<properties>
 		<java.version>21</java.version>
+        <sonar.organization>mihael10</sonar.organization>
 	</properties>
 	<dependencies>
 		<dependency>
