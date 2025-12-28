@@ -7,14 +7,14 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Testcontainers
-public class ProductResponseDtoTests {
+class ProductResponseDtoTests {
 
     @Test
-    public void shouldMapProductToProductResponseDTO() {
+    void shouldMapProductToProductResponseDTO() {
         // Create a Product object
         Product product = Product.builder()
                 .id("1")
