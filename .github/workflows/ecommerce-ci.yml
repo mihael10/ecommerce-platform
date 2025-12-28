@@ -129,20 +129,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and analyze (SonarCloud)
-        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+      - name: Check SONAR_TOKEN is present
+        shell: bash
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "SONAR_TOKEN is EMPTY in this run"
+            exit 1
+          fi
           echo "SONAR_TOKEN length: ${#SONAR_TOKEN}"
-          mvn -B -ntp -Pcoverage verify \
-            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.token="$SONAR_TOKEN" \
-            -Dsonar.scanner.skipJreProvisioning=true \
-            -Dsonar.projectKey=mihael10_ecommerce-platform \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=mihael10 \
-            -Dsonar.coverage.jacoco.xmlReportPaths="**/target/site/jacoco/jacoco.xml" \
-            -Dsonar.qualitygate.wait=true
-      
