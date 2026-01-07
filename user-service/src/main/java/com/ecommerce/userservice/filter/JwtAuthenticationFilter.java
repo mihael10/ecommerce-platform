@@ -1,38 +1,28 @@
 package com.ecommerce.userservice.filter;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.security.Key;
-import java.util.function.Function;
+import java.util.List;
+
+import com.ecommerce.userservice.util.JwtUtil;
 
 @Component
 public class JwtAuthenticationFilter implements WebFilter {
 
-    private static final String SECRET_KEY = "your-secure-secret-key-should-be-very-long";
+    private final JwtUtil jwtUtil;
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    }
-
-    private String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        Claims claims = Jwts.parser().setSigningKey(getSigningKey()).build()
-                .parseClaimsJws(token).getBody();
-        return claimsResolver.apply(claims);
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -49,14 +39,19 @@ public class JwtAuthenticationFilter implements WebFilter {
         }
 
         String token = authorizationHeader.substring(7);
-        String username = extractUsername(token);
-
-        if (username != null) {
-            PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(username, token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            String username = jwtUtil.extractUsername(token);
+            if (username != null && jwtUtil.validateToken(token, username)) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(username, token, List.of());
+                return chain.filter(exchange)
+                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+            }
+        } catch (JwtException | IllegalArgumentException ex) {
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
         }
 
         return chain.filter(exchange);
     }
 }
-
