@@ -1,23 +1,19 @@
 package com.ecommerce.userservice.filter;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.function.Function;
+import com.ecommerce.userservice.util.JwtUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,8 +35,11 @@ class JwtAuthenticationFilterTest {
     @Mock
     private WebFilterChain chain;
 
-    private static final String SECRET_KEY = "your-secure-secret-key-should-be-very-long";
+    @Mock
+    private JwtUtil jwtUtil;
+
     private static final String MOCK_USERNAME = "testuser";
+    private static final String MOCK_TOKEN = "mock-token";
 
     @BeforeEach
     void setUp() {
@@ -49,18 +48,7 @@ class JwtAuthenticationFilterTest {
         when(exchange.getResponse()).thenReturn(response);
     }
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private String generateTestToken() {
-        return Jwts.builder()
-                .setSubject(MOCK_USERNAME)
-                .signWith(getSigningKey())
-                .compact();
-    }
-
-
+    @Test
     void filter_ShouldProceedWithoutAuthHeader() {
         when(request.getHeaders()).thenReturn(new HttpHeaders());
 
@@ -70,6 +58,7 @@ class JwtAuthenticationFilterTest {
         verify(chain, times(1)).filter(exchange);
     }
 
+    @Test
     void filter_ShouldProceedWithInvalidAuthHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "InvalidToken");
@@ -84,13 +73,15 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void filter_ShouldAuthenticateUserWithValidToken() {
-        String token = "Bearer " + generateTestToken();
+        String token = "Bearer " + MOCK_TOKEN;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, token);
 
         when(request.getHeaders()).thenReturn(headers);
         when(chain.filter(exchange)).thenReturn(Mono.empty());
+        when(jwtUtil.extractUsername(MOCK_TOKEN)).thenReturn(MOCK_USERNAME);
+        when(jwtUtil.validateToken(MOCK_TOKEN, MOCK_USERNAME)).thenReturn(true);
 
         Mono<Void> result = jwtAuthenticationFilter.filter(exchange, chain);
 
@@ -99,16 +90,20 @@ class JwtAuthenticationFilterTest {
     }
 
     @Test
-    void extractUsername_ShouldReturnUsername() {
-        String token = generateTestToken();
-        String username = extractClaim(token, Claims::getSubject);
+    void filter_ShouldRejectInvalidToken() {
+        String token = "Bearer " + MOCK_TOKEN;
 
-        assertEquals(MOCK_USERNAME, username);
-    }
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, token);
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        Claims claims = Jwts.parser().setSigningKey(getSigningKey()).build()
-                .parseClaimsJws(token).getBody();
-        return claimsResolver.apply(claims);
+        when(request.getHeaders()).thenReturn(headers);
+        when(jwtUtil.extractUsername(MOCK_TOKEN)).thenThrow(new IllegalArgumentException("bad token"));
+        when(response.setComplete()).thenReturn(Mono.empty());
+
+        Mono<Void> result = jwtAuthenticationFilter.filter(exchange, chain);
+
+        assertNotNull(result);
+        verify(chain, never()).filter(exchange);
+        verify(response).setStatusCode(HttpStatus.UNAUTHORIZED);
     }
 }
