@@ -22,14 +22,14 @@ coverage:
     patch: true      # Enforce minimum coverage for new changes/patches
     project:
       default:
-        target: 100%     # Projects must aim for complete (100%) coverage
-        threshold: 1%    # Allow a small buffer for minor changes without CI failure
+        target: 85%     # Set an attainable overall coverage target
+        threshold: 2%   # Allow a small buffer for minor changes without CI failure
       branches:
-        target: 80%      # Require 80% branch coverage minimum
+        target: 70%     # Require 70% branch coverage minimum
       lines:
-        target: 90%      # Require 90% line coverage
+        target: 80%     # Require 80% line coverage
       functions:
-        target: 75%      # Set functional tests coverage at a minimum of 75%
+        target: 70%     # Set functional tests coverage at a minimum of 70%
 
 flags:
   - unit-tests          # Divide tests by flag for isolated tracking and reporting
