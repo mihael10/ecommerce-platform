@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(
+        origins = "${app.cors.allowed-origins}",
+        methods = {RequestMethod.GET, RequestMethod.POST}
+)
 @AllArgsConstructor
 @RequestMapping("api/product")
 public class ProductController {
