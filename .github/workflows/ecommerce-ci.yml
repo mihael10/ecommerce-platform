@@ -135,4 +135,4 @@ jobs:
         shell: bash
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: echo "SONAR_TOKEN length: ${#SONAR_TOKEN}"
+        run: echo "SONAR_TOKEN length: ${SONAR_TOKEN}"
